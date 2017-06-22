@@ -1,5 +1,6 @@
 package com.rpham64.android.zaplabstask.ui.list;
 
+import com.orhanobut.logger.Logger;
 import com.rpham64.android.zaplabstask.models.ListItem;
 import com.rpham64.android.zaplabstask.ui.base.BasePresenter;
 
@@ -24,6 +25,9 @@ public class ListPresenter extends BasePresenter<ListPresenter.View> {
         call.enqueue(new Callback<List<ListItem>>() {
             @Override
             public void onResponse(Call<List<ListItem>> call, Response<List<ListItem>> response) {
+
+                Logger.json(response.toString());
+
                 List<ListItem> itemList = response.body();
                 getView().showList(itemList);
             }

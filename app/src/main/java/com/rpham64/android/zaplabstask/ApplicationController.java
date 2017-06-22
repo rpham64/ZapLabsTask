@@ -1,8 +1,9 @@
-package com.rpham64.android.zaplabstask.ui;
+package com.rpham64.android.zaplabstask;
 
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.rpham64.android.zaplabstask.network.RestClient;
 
 import okhttp3.OkHttpClient;
@@ -25,15 +26,12 @@ public class ApplicationController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        sInstance = this;
         Stetho.initializeWithDefaults(this);
 
-//        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-//        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//
-//        mOkHttpClient = new OkHttpClient.Builder()
-//                .addNetworkInterceptor(new StethoInterceptor())
-//                .addInterceptor(loggingInterceptor)
-//                .build();
+        mOkHttpClient = new OkHttpClient().newBuilder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
     }
 
     public RestClient getRestClient() {
@@ -42,7 +40,7 @@ public class ApplicationController extends Application {
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .client(new OkHttpClient())
+                    .client(mOkHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -53,9 +51,6 @@ public class ApplicationController extends Application {
     }
 
     public static ApplicationController getInstance() {
-        if (sInstance == null) {
-            sInstance = new ApplicationController();
-        }
         return sInstance;
     }
 }

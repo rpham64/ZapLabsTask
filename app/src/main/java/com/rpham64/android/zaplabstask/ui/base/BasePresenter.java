@@ -3,7 +3,7 @@ package com.rpham64.android.zaplabstask.ui.base;
 import android.support.annotation.CallSuper;
 
 import com.rpham64.android.zaplabstask.network.RestClient;
-import com.rpham64.android.zaplabstask.ui.ApplicationController;
+import com.rpham64.android.zaplabstask.ApplicationController;
 
 /**
  * Created by Rudolf on 5/3/2017.

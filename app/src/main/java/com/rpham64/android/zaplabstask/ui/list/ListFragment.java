@@ -31,6 +31,8 @@ public class ListFragment extends Fragment implements ListPresenter.View {
     private ListPresenter mPresenter;
     private ListAdapter mAdapter;
 
+    private List<ListItem> mItemList;
+
     public static ListFragment newInstance() {
         return new ListFragment();
     }
@@ -41,7 +43,6 @@ public class ListFragment extends Fragment implements ListPresenter.View {
         setRetainInstance(true);
 
         mPresenter = new ListPresenter();
-        mPresenter.attachView(this);
     }
 
     @Nullable
@@ -50,11 +51,16 @@ public class ListFragment extends Fragment implements ListPresenter.View {
 
         View view = inflater.inflate(R.layout.fragment_list_photos, container, false);
         mUnbinder = ButterKnife.bind(this, view);
+        mPresenter.attachView(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        mPresenter.getListItems();
+        if (mItemList == null) {
+            mPresenter.getListItems();
+        } else {
+            showList(mItemList);
+        }
 
         return view;
     }
@@ -68,6 +74,9 @@ public class ListFragment extends Fragment implements ListPresenter.View {
 
     @Override
     public void showList(List<ListItem> itemList) {
+
+        mItemList = itemList;
+
         if (isAdded()) {
             mAdapter = new ListAdapter(getContext(), itemList);
             recyclerView.setAdapter(mAdapter);
